@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {Button} from "./Button";
+import s from "./Counter.module.css"
 
-type CounterPropsType = {
-
-}
+type CounterPropsType = {}
 
 export const Counter = (props: CounterPropsType) => {
     const maxValue: number = 5
     const minValue: number = 0
+
     const [value, setValue] = useState(0)
     const onClickIncHandler = () => {
         setValue(value + 1)
@@ -17,19 +17,21 @@ export const Counter = (props: CounterPropsType) => {
         setValue(minValue)
     }
     return (
-        <div className={"counter"}>
-            <div className={value === maxValue ? "maxValue" : "value"}>
-                {value}
+        <div className={s.counter}>
+            <div className={s.panel}>
+                <div className={value === maxValue ? s.maxValue : s.value}>
+                    {value}
+                </div>
             </div>
-            <div className={"buttonContainer"}>
-                <Button name={"inc"}
+            <div className={s.buttonsContainer}>
+                <Button name={"Inc"}
                         callback={onClickIncHandler}
                         disabled={value === maxValue}
-                        className={"button"}/>
-                <Button name={"reset"}
+                        className={value === maxValue ? s.disabled : s.button }/>
+                <Button name={"Reset"}
                         callback={onClickResetHandler}
                         disabled={value === minValue}
-                        className={"button"}/>
+                        className={value === minValue ? s.disabled : s.button }/>
             </div>
         </div>
     )

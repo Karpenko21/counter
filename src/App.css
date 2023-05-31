@@ -1,52 +1,6 @@
 .App {
-  text-align: center;
-}
-.counter {
-  border: 3px solid white;
-  width: 200px;
-  height: 200px;
-  margin: 50px;
-  background: mediumpurple;
-  color: white;
-  border-radius: 5px;
-}
-
-.value {
-  border: 3px solid white;
-  width: 158px;
-  height: 120px;
-  margin: 10px 20px;
-  padding: 3px;
-  border-radius: 5px;
-  font-size: 50px;
-}
-
-.maxValue {
-  border: 2px solid white;
-  width: 158px;
-  height: 120px;
-  margin: 10px 20px;
-  padding: 3px;
-  border-radius: 5px;
-  color: darkblue;
-  font-size: 50px;
-}
-
-.button {
-  margin: 2px;
-  width: 60px;
-  height: 45px;
-  background: purple;
-  border-radius: 5px;
-  border: 1px solid white;
-/*  color: white;*/
-  font-size: 20px;
-}
-.buttonContainer {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  margin: 10px 10px;
+  justify-items: center;
+  text-align: center;
 }
-
-
