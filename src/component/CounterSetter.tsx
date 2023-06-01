@@ -11,32 +11,6 @@ export const CounterSetter = (props: CounterSetterPropsType) => {
 
     const [error, setError] = useState<string>('')
 
-/*
-    useEffect( () => {
-        let storageMaxValueAsString = localStorage.getItem('counterMaxValue')
-        if (storageMaxValueAsString) {
-            let storageMaxValue = JSON.parse(storageMaxValueAsString)
-            setMaxValue(storageMaxValue)
-        }
-    }, [])
-
-
-    useEffect( () => {
-        localStorage.setItem('counterMaxValue', JSON.stringify(maxValue))
-    }, [maxValue])
-
-    useEffect( () => {
-        let storageMinValueAsString = localStorage.getItem('counterMinValue')
-        if (storageMinValueAsString) {
-            let storageMinValue = JSON.parse(storageMinValueAsString)
-            setMaxValue(storageMinValue)
-        }
-    }, [])
-
-    useEffect( () => {
-        localStorage.setItem('counterMinValue', JSON.stringify(minValue))
-    }, [minValue])*/
-
 
     const onChangeMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
         let newMaxValue = Number(e.currentTarget.value)
@@ -47,7 +21,7 @@ export const CounterSetter = (props: CounterSetterPropsType) => {
             setMaxValue(newMaxValue)
             setError('Enter values and press "set"')
         }
-       /* setMaxValue(Number(e.currentTarget.value))*/
+        setMaxValue(Number(e.currentTarget.value))
     }
     const onChangeMinValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
         let newMinValue = Number(e.currentTarget.value)
@@ -58,6 +32,26 @@ export const CounterSetter = (props: CounterSetterPropsType) => {
             setMinValue(newMinValue)
             setError('Incorrect value')
         }
+    }
+
+
+    useEffect( () => {
+        let storageMaxValueAsString = localStorage.getItem('counterMaxValue')
+        let storageMinValueAsString = localStorage.getItem('counterMinValue')
+
+        if (storageMaxValueAsString) {
+            let storageMaxValue = JSON.parse(storageMaxValueAsString)
+            setMaxValue(storageMaxValue)
+        }
+        if (storageMinValueAsString) {
+            let storageMinValue = JSON.parse(storageMinValueAsString)
+            setMinValue(storageMinValue)
+        }
+    }, [])
+
+    const ChangeValues = () => {
+            localStorage.setItem('counterMaxValue', JSON.stringify(maxValue))
+            localStorage.setItem('counterMinValue', JSON.stringify(minValue))
     }
 
     return (
@@ -80,8 +74,8 @@ export const CounterSetter = (props: CounterSetterPropsType) => {
             </div>
             <div className={s.buttonsContainer}>
                 <Button name={'Set'}
-                        callback={() => {
-                }}
+                       /* callback={()=>{}}*/
+                        callback={ChangeValues}
                         disabled={error === 'Incorrect value' }
                         className={error === 'Incorrect value' ? s.disabled : s.button }/>
             </div>
