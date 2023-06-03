@@ -1,37 +1,66 @@
 import React, {useState} from 'react';
 import {Button} from "./Button";
 import s from "./Counter.module.css"
+import {CounterPropsType} from "./CounterSetter";
 
-type CounterPropsType = {}
 
-export const Counter = (props: CounterPropsType) => {
-    const maxValue: number = 5
-    const minValue: number = 0
+export const Counter: React.FC<CounterPropsType> = (
+    {
+        value,
+        maxValue,
+        minValue,
+        error,
 
-    const [value, setValue] = useState(0)
+        callbackForValue,
+
+        errorWarning,
+        messageAfterError
+    }
+) => {
+
     const onClickIncHandler = () => {
-        setValue(value + 1)
+        callbackForValue(value + 1)
     }
 
     const onClickResetHandler = () => {
-        setValue(minValue)
+        callbackForValue(minValue)
     }
     return (
         <div className={s.counter}>
             <div className={s.panel}>
-                <div className={value === maxValue ? s.maxValue : s.value}>
-                    {value}
+                <div className={
+                    error === errorWarning
+                        ? s.errorWarning
+                        : error === messageAfterError
+                            ? s.messageAfterError
+                            : value === maxValue
+                                ? s.maxValue
+                                : s.value}
+                >
+                    {error === errorWarning
+                        ? errorWarning
+                        : error === messageAfterError
+                            ? messageAfterError
+                            : value}
                 </div>
             </div>
             <div className={s.buttonsContainer}>
                 <Button name={"Inc"}
                         callback={onClickIncHandler}
-                        disabled={value === maxValue}
-                        className={value === maxValue ? s.disabled : s.button }/>
+                        disabled={value === maxValue ? true : !!error}
+                        className={value === maxValue
+                            ? s.disabled
+                            : error
+                                ? s.disabled
+                                : s.button}/>
                 <Button name={"Reset"}
                         callback={onClickResetHandler}
-                        disabled={value === minValue}
-                        className={value === minValue ? s.disabled : s.button }/>
+                        disabled={value === minValue ? true : !!error}
+                        className={value === minValue
+                            ? s.disabled
+                            : error
+                                ? s.disabled
+                                : s.button}/>
             </div>
         </div>
     )

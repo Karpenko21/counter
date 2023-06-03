@@ -2,56 +2,80 @@ import React, {ChangeEvent, useEffect, useState} from 'react';
 import s from "./Counter.module.css"
 import {Button} from "./Button";
 
-type CounterSetterPropsType = {}
+export type CounterPropsType = {
+    value: number
+    maxValue: number
+    minValue: number
+    error: string
 
-export const CounterSetter = (props: CounterSetterPropsType) => {
+    callbackForValue: (value: number) => void
+    callbackForMaxValue: (maxValue: number) => void
+    callbackForMinValue: (minValue: number) => void
+    callbackForError: (error: string) => void
 
-    const [maxValue, setMaxValue] = useState<number>(0)
-    const [minValue, setMinValue] = useState<number>(0)
+    errorWarning: string
+    messageAfterError: string
+}
 
-    const [error, setError] = useState<string>('')
+export const CounterSetter: React.FC<CounterPropsType> = (
+    {
+        value,
+        maxValue,
+        minValue,
+        error,
 
+        callbackForValue,
+        callbackForMaxValue,
+        callbackForMinValue,
+        callbackForError,
 
+        errorWarning,
+        messageAfterError
+    }
+) => {
     const onChangeMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
         let newMaxValue = Number(e.currentTarget.value)
         if (newMaxValue <= minValue || newMaxValue < 0) {
-            setMaxValue(newMaxValue)
-            setError('Incorrect value')
+            callbackForMaxValue(newMaxValue)
+            callbackForError(errorWarning)
         } else {
-            setMaxValue(newMaxValue)
-            setError('Enter values and press "set"')
+            callbackForMaxValue(newMaxValue)
+            callbackForError(messageAfterError)
         }
-        setMaxValue(Number(e.currentTarget.value))
+        callbackForMaxValue(Number(e.currentTarget.value))
     }
     const onChangeMinValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
         let newMinValue = Number(e.currentTarget.value)
         if (newMinValue >= 0 && newMinValue < maxValue) {
-            setMinValue(newMinValue)
-            setError('Enter values and press "set"')
+            callbackForMinValue(newMinValue)
+            callbackForError(messageAfterError)
         } else {
-            setMinValue(newMinValue)
-            setError('Incorrect value')
+            callbackForMinValue(newMinValue)
+            callbackForError(errorWarning)
         }
     }
 
 
-    useEffect( () => {
+    useEffect(() => {
         let storageMaxValueAsString = localStorage.getItem('counterMaxValue')
         let storageMinValueAsString = localStorage.getItem('counterMinValue')
 
         if (storageMaxValueAsString) {
             let storageMaxValue = JSON.parse(storageMaxValueAsString)
-            setMaxValue(storageMaxValue)
+            callbackForMaxValue(storageMaxValue)
         }
         if (storageMinValueAsString) {
             let storageMinValue = JSON.parse(storageMinValueAsString)
-            setMinValue(storageMinValue)
+            callbackForMinValue(storageMinValue)
         }
     }, [])
 
+
     const ChangeValues = () => {
-            localStorage.setItem('counterMaxValue', JSON.stringify(maxValue))
-            localStorage.setItem('counterMinValue', JSON.stringify(minValue))
+        localStorage.setItem('counterMaxValue', JSON.stringify(maxValue))
+        localStorage.setItem('counterMinValue', JSON.stringify(minValue))
+        callbackForError('')
+        callbackForValue(minValue)
     }
 
     return (
@@ -61,23 +85,22 @@ export const CounterSetter = (props: CounterSetterPropsType) => {
                     <span>Max value:
                         <input type={"number"}
                                value={maxValue}
-                               className={error === 'Incorrect value' ? s.error : s.input}
+                               className={error === errorWarning ? s.error : s.input}
                                onChange={onChangeMaxValueHandler}/></span>
                 </div>
                 <div className={s.panelInputValue}>
                     <span>Start value:
                         <input type={"number"}
                                value={minValue}
-                               className={error === 'Incorrect value' ? s.error : s.input}
+                               className={error === errorWarning ? s.error : s.input}
                                onChange={onChangeMinValueHandler}/></span>
                 </div>
             </div>
             <div className={s.buttonsContainer}>
                 <Button name={'Set'}
-                       /* callback={()=>{}}*/
                         callback={ChangeValues}
-                        disabled={error === 'Incorrect value' }
-                        className={error === 'Incorrect value' ? s.disabled : s.button }/>
+                        disabled={error === errorWarning}
+                        className={error === errorWarning ? s.disabled : s.button}/>
             </div>
         </div>
     )
