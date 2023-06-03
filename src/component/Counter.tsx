@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Button} from "./Button";
 import s from "./Counter.module.css"
 import {CounterPropsType} from "./CounterSetter";
@@ -10,9 +10,7 @@ export const Counter: React.FC<CounterPropsType> = (
         maxValue,
         minValue,
         error,
-
         callbackForValue,
-
         errorWarning,
         messageAfterError
     }

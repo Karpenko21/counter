@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect} from 'react';
 import s from "./Counter.module.css"
 import {Button} from "./Button";
 
@@ -19,7 +19,6 @@ export type CounterPropsType = {
 
 export const CounterSetter: React.FC<CounterPropsType> = (
     {
-        value,
         maxValue,
         minValue,
         error,
@@ -35,22 +34,19 @@ export const CounterSetter: React.FC<CounterPropsType> = (
 ) => {
     const onChangeMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
         let newMaxValue = Number(e.currentTarget.value)
+        callbackForMaxValue(newMaxValue)
         if (newMaxValue <= minValue || newMaxValue < 0) {
-            callbackForMaxValue(newMaxValue)
             callbackForError(errorWarning)
         } else {
-            callbackForMaxValue(newMaxValue)
             callbackForError(messageAfterError)
         }
-        callbackForMaxValue(Number(e.currentTarget.value))
     }
     const onChangeMinValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
         let newMinValue = Number(e.currentTarget.value)
+        callbackForMinValue(newMinValue)
         if (newMinValue >= 0 && newMinValue < maxValue) {
-            callbackForMinValue(newMinValue)
             callbackForError(messageAfterError)
         } else {
-            callbackForMinValue(newMinValue)
             callbackForError(errorWarning)
         }
     }
@@ -59,6 +55,7 @@ export const CounterSetter: React.FC<CounterPropsType> = (
     useEffect(() => {
         let storageMaxValueAsString = localStorage.getItem('counterMaxValue')
         let storageMinValueAsString = localStorage.getItem('counterMinValue')
+        let storageValueAsString = localStorage.getItem('counterValue')
 
         if (storageMaxValueAsString) {
             let storageMaxValue = JSON.parse(storageMaxValueAsString)
@@ -68,12 +65,17 @@ export const CounterSetter: React.FC<CounterPropsType> = (
             let storageMinValue = JSON.parse(storageMinValueAsString)
             callbackForMinValue(storageMinValue)
         }
+        if (storageValueAsString) {
+            let storageValue = JSON.parse(storageValueAsString)
+            callbackForValue(storageValue)
+        }
     }, [])
 
 
     const ChangeValues = () => {
         localStorage.setItem('counterMaxValue', JSON.stringify(maxValue))
         localStorage.setItem('counterMinValue', JSON.stringify(minValue))
+        localStorage.setItem('counterValue', JSON.stringify(minValue))
         callbackForError('')
         callbackForValue(minValue)
     }

@@ -43,7 +43,7 @@ function App() {
                 errorWarning={errorWarning}
                 messageAfterError={messageAfterError}/>
         </div>
-    );
+    )
 }
 
 export default App;
