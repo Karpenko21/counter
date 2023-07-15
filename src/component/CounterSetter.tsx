@@ -1,56 +1,25 @@
-import React, {ChangeEvent, useEffect} from 'react';
+import React, {ChangeEvent} from 'react';
 import s from "./Counter.module.css"
 import {Button} from "./Button";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../state/store";
+import {changeMaxValueAC, changeMinValueAC, changeValuesAC, CounterVariablesType} from "../state/counterReducer";
 
-export type CounterPropsType = {
-    value: number
-    maxValue: number
-    minValue: number
-    error: string
 
-    callbackForValue: (value: number) => void
-    callbackForMaxValue: (maxValue: number) => void
-    callbackForMinValue: (minValue: number) => void
-    callbackForError: (error: string) => void
+export const CounterSetter = () => {
 
-    errorWarning: string
-    messageAfterError: string
-}
+    const counterVariables = useSelector<AppRootStateType, CounterVariablesType>(state => state.counterVariables)
+    const dispatch = useDispatch();
 
-export const CounterSetter: React.FC<CounterPropsType> = (
-    {
-        maxValue,
-        minValue,
-        error,
-
-        callbackForValue,
-        callbackForMaxValue,
-        callbackForMinValue,
-        callbackForError,
-
-        errorWarning,
-        messageAfterError
-    }
-) => {
     const onChangeMaxValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        let newMaxValue = Number(e.currentTarget.value)
-        callbackForMaxValue(newMaxValue)
-        if (newMaxValue <= minValue || newMaxValue < 0) {
-            callbackForError(errorWarning)
-        } else {
-            callbackForError(messageAfterError)
-        }
+        dispatch(changeMaxValueAC(Number(e.currentTarget.value)))
     }
     const onChangeMinValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        let newMinValue = Number(e.currentTarget.value)
-        callbackForMinValue(newMinValue)
-        if (newMinValue >= 0 && newMinValue < maxValue) {
-            callbackForError(messageAfterError)
-        } else {
-            callbackForError(errorWarning)
-        }
+        dispatch(changeMinValueAC(Number(e.currentTarget.value)))
     }
 
+
+/*
 
     useEffect(() => {
         let storageMaxValueAsString = localStorage.getItem('counterMaxValue')
@@ -70,14 +39,14 @@ export const CounterSetter: React.FC<CounterPropsType> = (
             callbackForValue(storageValue)
         }
     }, [])
+*/
 
 
-    const ChangeValues = () => {
-        localStorage.setItem('counterMaxValue', JSON.stringify(maxValue))
+    const сhangeValues = () => {
+   /*     localStorage.setItem('counterMaxValue', JSON.stringify(maxValue))
         localStorage.setItem('counterMinValue', JSON.stringify(minValue))
-        localStorage.setItem('counterValue', JSON.stringify(minValue))
-        callbackForError('')
-        callbackForValue(minValue)
+        localStorage.setItem('counterValue', JSON.stringify(minValue))*/
+     dispatch(changeValuesAC())
     }
 
     return (
@@ -86,23 +55,23 @@ export const CounterSetter: React.FC<CounterPropsType> = (
                 <div className={s.panelInputValue}>
                     <span>Max value:
                         <input type={"number"}
-                               value={maxValue}
-                               className={error === errorWarning ? s.error : s.input}
+                               value={counterVariables.maxValue}
+                               className={counterVariables.error === counterVariables.errorWarning ? s.error : s.input}
                                onChange={onChangeMaxValueHandler}/></span>
                 </div>
                 <div className={s.panelInputValue}>
                     <span>Start value:
                         <input type={"number"}
-                               value={minValue}
-                               className={error === errorWarning ? s.error : s.input}
+                               value={counterVariables.minValue}
+                               className={counterVariables.error === counterVariables.errorWarning ? s.error : s.input}
                                onChange={onChangeMinValueHandler}/></span>
                 </div>
             </div>
             <div className={s.buttonsContainer}>
                 <Button name={'Set'}
-                        callback={ChangeValues}
-                        disabled={error === errorWarning}
-                        className={error === errorWarning ? s.disabled : s.button}/>
+                        callback={сhangeValues}
+                        disabled={counterVariables.error === counterVariables.errorWarning}
+                        className={counterVariables.error === counterVariables.errorWarning ? s.disabled : s.button}/>
             </div>
         </div>
     )
