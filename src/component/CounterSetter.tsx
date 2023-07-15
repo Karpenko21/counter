@@ -42,12 +42,18 @@ export const CounterSetter = () => {
 */
 
 
-    const сhangeValues = () => {
+    const changeValues = () => {
    /*     localStorage.setItem('counterMaxValue', JSON.stringify(maxValue))
         localStorage.setItem('counterMinValue', JSON.stringify(minValue))
         localStorage.setItem('counterValue', JSON.stringify(minValue))*/
      dispatch(changeValuesAC())
     }
+
+    const classNameInputMax = counterVariables.error === counterVariables.errorWarning ? s.error : s.input
+    const classNameInputMin = counterVariables.error === counterVariables.errorWarning ? s.error : s.input
+
+    const isDisabled = counterVariables.error === counterVariables.errorWarning
+    const classNameButtonSet = counterVariables.error === counterVariables.errorWarning ? s.disabled : s.button
 
     return (
         <div className={s.counter}>
@@ -56,22 +62,22 @@ export const CounterSetter = () => {
                     <span>Max value:
                         <input type={"number"}
                                value={counterVariables.maxValue}
-                               className={counterVariables.error === counterVariables.errorWarning ? s.error : s.input}
+                               className={classNameInputMax}
                                onChange={onChangeMaxValueHandler}/></span>
                 </div>
                 <div className={s.panelInputValue}>
                     <span>Start value:
                         <input type={"number"}
                                value={counterVariables.minValue}
-                               className={counterVariables.error === counterVariables.errorWarning ? s.error : s.input}
+                               className={classNameInputMin}
                                onChange={onChangeMinValueHandler}/></span>
                 </div>
             </div>
             <div className={s.buttonsContainer}>
                 <Button name={'Set'}
-                        callback={сhangeValues}
-                        disabled={counterVariables.error === counterVariables.errorWarning}
-                        className={counterVariables.error === counterVariables.errorWarning ? s.disabled : s.button}/>
+                        callback={changeValues}
+                        disabled={isDisabled}
+                        className={classNameButtonSet}/>
             </div>
         </div>
     )

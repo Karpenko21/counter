@@ -39,11 +39,16 @@ export const Counter = () => {
             ? s.disabled
             : s.button
 
+    const inkIsDisabled = counterVariables.value === counterVariables.maxValue ? true : !!counterVariables.error
+
     const classNameReset = counterVariables.value === counterVariables.minValue
             ? s.disabled
             : counterVariables.error
                 ? s.disabled
                 : s.button
+
+    const resetIsDisabled = counterVariables.value === counterVariables.minValue ? true : !!counterVariables.error
+
 
     return (
         <div className={s.counter}>
@@ -55,11 +60,11 @@ export const Counter = () => {
             <div className={s.buttonsContainer}>
                 <Button name={"Inc"}
                         callback={onClickIncHandler}
-                        disabled={counterVariables.value === counterVariables.maxValue ? true : !!counterVariables.error}
+                        disabled={inkIsDisabled}
                         className={classNameInc}/>
                 <Button name={"Reset"}
                         callback={onClickResetHandler}
-                        disabled={counterVariables.value === counterVariables.minValue ? true : !!counterVariables.error}
+                        disabled={resetIsDisabled}
                         className={classNameReset}/>
             </div>
         </div>
