@@ -19,6 +19,7 @@ export const Counter = () => {
         dispatch(clickResetAC())
     }
 
+
     const classNamePanel = counterVariables.error === counterVariables.errorWarning
         ? s.errorWarning
         : counterVariables.error === counterVariables.messageAfterError

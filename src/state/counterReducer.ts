@@ -19,23 +19,22 @@ const initialState: CounterVariablesType = {
     messageAfterError: 'Enter values and press "set"'
 }
 
-export const counterReducer = (state: CounterVariablesType = initialState, action: ActionsType): CounterVariablesType => {
+export const counterReducer = (state = initialState, action: ActionsType): CounterVariablesType => {
     switch (action.type) {
         case "CHANGE-MAX-VALUE": {
             if (action.newMaxValue <= state.minValue || action.newMaxValue < 0 || state.minValue < 0) {
-                state = {...state, error: state.errorWarning}
+                return {...state, maxValue: action.newMaxValue, error: state.errorWarning}
             } else {
-                state = {...state, error: state.messageAfterError}
+                return {...state, error: state.messageAfterError, maxValue: action.newMaxValue}
             }
-            return {...state, maxValue: action.newMaxValue}
+
         }
         case "CHANGE-MIN-VALUE": {
             if (action.newMinValue >= 0 && action.newMinValue < state.maxValue) {
-                state = {...state, error: state.messageAfterError}
+                return {...state, error: state.messageAfterError,  minValue: action.newMinValue}
             } else {
-                state = {...state, error: state.errorWarning}
+                return {...state, error: state.errorWarning, minValue: action.newMinValue}
             }
-            return {...state, minValue: action.newMinValue}
         }
         case "CHANGE-VALUES": {
             return {...state, error: '', value: state.minValue}
